@@ -9,7 +9,6 @@ var DB *gorm.DB
 
 func ConnectDatabase() {
 	dsn := "zenwel:zenwel-api@tcp(127.0.0.1:3306)/gocrud?charset=utf8mb4&parseTime=True&loc=Local"
-	// database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
