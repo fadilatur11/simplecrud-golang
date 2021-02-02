@@ -13,6 +13,7 @@ type CreateBookInput struct {
 	Author string `json:"author" binding:"required"`
 }
 
+// action create book
 func CreateBook(c *gin.Context) {
 	var input CreateBookInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -24,6 +25,29 @@ func CreateBook(c *gin.Context) {
 	models.DB.Create(&book)
 
 	c.JSON(http.StatusOK, gin.H{"data": book})
+}
+
+//get single book
+func FindBook(c *gin.Context) {
+	var book models.Book
+
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not Found"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": book})
+}
+
+//delete book
+func DeleteBook(c *gin.Context) {
+	var book models.Book
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not Found"})
+		return
+	}
+	models.DB.Delete(&book)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }
 
 func FindBooks(c *gin.Context) {
